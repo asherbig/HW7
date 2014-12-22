@@ -5,7 +5,7 @@
 
 from Myro import *
 #init("/dev/tty.Fluke2-02A9-Fluke2")
-#init()
+init()
 #setPicSize("small")
 #p = takePicture()
 #turnBy(-90,"deg")
@@ -17,6 +17,12 @@ from Myro import *
 #gpic = makePicture("greenscreen_source1.jpeg")
 #gpic2 = makePicture("greenscreen_back.jpg")
 
+# Most of the functions that require more than one picture for input will not work if
+# The picture are different dimensions.
+
+# This function takes a picture with a greenscreen and replaces the green pixels with pixels from the other picture.
+# It examines every pixel. If it is green, then it gets the pixels from 
+# the same x and y in picture 2 and replaces it in the greenscreen picture
 def greenScreen(greenPic, otherPic):
     for pix in getPixels(greenPic):
         r,g,b = getRGB(pix)
@@ -29,10 +35,8 @@ def greenScreen(greenPic, otherPic):
     show(greenPic)
     savePicture(greenPic, "greenScreen.jpg")
 
-#greenPic = makePicture(takePicture())
-#otherPic = makePicture(takePicture())
-#greenScreen(greenPic, otherPic)
 
+# This function blacks out the corners of the picture.
 def cornersOverlay(p):
     height = getHeight(p)
     width = getWidth(p)
@@ -79,16 +83,17 @@ def cornersOverlay(p):
     show(p)
     savePicture(p,"corner-overlay.jpg")
 
-#cornersOverlay(p)
 
+# This tints the entire picture red.
 def seeingRed(p):
     for pix in getPixels(p):
         setRed(pix,255)
     show(p)
     savePicture(p, "seeing-red.jpg")
 
-#seeingRed(p)
 
+# This takes a picture and makes it darker until it gets to a black screen.
+# It saves every step of the way into a list and creates a .gif at the end.
 def fade(p):
     aList = []
     for i in range(10):
@@ -103,8 +108,11 @@ def fade(p):
         aList.append(copy)
     savePicture(aList, "fade.gif")
 
-#fade(p)
 
+# This takes a picture and shakes it around the screen.
+# The function takes the picture and centers it on a larger white picture
+# Then the picture is moved randomly up, down, side to side, etc
+# Each movement is saves into a list, which gets turned into a .gif at the end.
 def screenShake(p):
     picList = []
     slides = 10
@@ -143,8 +151,11 @@ def screenShake(p):
         print(out.format(percent))
         savePicture(picList, "screenShake.gif")
 
-#screenShake(p)
 
+# This function takes 2 pictures and fades from one to the other.
+# The color differences are averaged between the pictures and the function slowly changes the pixels on one
+# until the picture ends up looking like the sencond picture.
+# The pictures are saved into a list and are saved as a .gif.
 def crossFade(p1,p2):
     aList = []
     aList.append(p1)
@@ -171,9 +182,3 @@ def crossFade(p1,p2):
     aList.append(p2)
     savePicture(aList,"crossfade.gif")
 
-#p1 = makePicture(takePicture())
-#beep(1,800)
-#the beep() function lets us know when it's done taking the picture
-#p2 = makePicture(takePicture())
-#beep(1,800)
-#crossFade(p1, p2)
